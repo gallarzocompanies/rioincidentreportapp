@@ -302,7 +302,7 @@
       cursor: not-allowed;
     }
 
-    /* ── Custom Interactive Status Progress Bar ── */
+    /* ── Custom Interactive Status Progress Bar (Matches Screenshot 1.29.39) ── */
     .status-timeline-container { display: flex; flex-direction: column; }
     .status-timeline {
       position: relative;
@@ -320,7 +320,7 @@
       right: 30px;
       height: 2px;
       background: var(--line);
-      z-index: 1;
+      z-index: 1; /* Completely hidden behind solid nodes */
     }
     .timeline-progress {
       position: absolute;
@@ -329,7 +329,7 @@
       height: 2px;
       background: linear-gradient(90deg, #00f0ff 0%, #ff9d00 50%, #10b981 100%);
       box-shadow: 0 0 15px var(--primary-2);
-      z-index: 2;
+      z-index: 2; /* Directly under nodes but above background line */
       width: 0%;
       transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1), height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
@@ -339,7 +339,7 @@
       flex-direction: column;
       align-items: center;
       text-align: center;
-      z-index: 3;
+      z-index: 3; /* Completely overlaps the tracking lines */
       flex: 1;
       cursor: pointer;
     }
@@ -347,7 +347,7 @@
       width: 52px;
       height: 52px;
       border-radius: 50%;
-      background: var(--step-node-bg);
+      background: var(--step-node-bg); /* Opaque solid color blocks background line */
       border: 3px solid var(--line);
       display: flex;
       align-items: center;
@@ -442,7 +442,7 @@
       color: var(--primary-2);
     }
 
-    /* ── Custom Severity Level Rounded Stacking Box ── */
+    /* ── Custom Severity Level Rounded Stacking Box (Matches Screenshot 1.29.55) ── */
     .severity-bar-container { display: flex; flex-direction: column; }
     .severity-bar-panel {
       display: flex;
@@ -512,7 +512,7 @@
     .option-grid.two { grid-template-columns: repeat(2, 1fr); }
     .option-grid.four { grid-template-columns: repeat(4, 1fr); }
 
-    /* ── Futuristic Check Pills (Sleek Rounded Buttons) ── */
+    /* ── Futuristic Check Pills (Sleek Rounded Buttons - Matches Screenshot 1.21.05) ── */
     .check-pill, .radio-pill {
       display: flex;
       flex-direction: row;
@@ -520,7 +520,7 @@
       gap: 14px;
       padding: 12px 18px;
       border: 1.5px solid var(--input-border);
-      border-radius: 16px;
+      border-radius: 16px; /* High fidelity Rounded Box Corner style */
       background: var(--input-bg);
       font-size: 13px;
       font-weight: 800;
@@ -552,14 +552,19 @@
       letter-spacing: 0.04em;
     }
 
-    /* Highlight Checked Option State */
+    /* High Fidelity Highlight Checked Option State (with Light Theme High Contrast highlights) */
     .check-pill:has(input:checked), .radio-pill:has(input:checked) {
       border-color: var(--primary-2);
       background: var(--soft-primary);
       box-shadow: 0 0 15px rgba(96, 165, 250, 0.2);
     }
+    [data-theme="light"] .check-pill:has(input:checked) span, 
+    [data-theme="light"] .radio-pill:has(input:checked) span {
+      color: var(--primary);
+      font-weight: 800;
+    }
 
-    /* ── Custom Interactive Yes/No Toggle Buttons ── */
+    /* ── Custom Interactive Yes/No Toggle Buttons (Matches Screenshot 1.35.22 PM) ── */
     .yes-no-row-custom {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -574,7 +579,7 @@
       gap: 12px;
       padding: 14px 24px;
       border: 1.5px solid var(--input-border);
-      border-radius: 16px;
+      border-radius: 16px; /* Rounded box corner style */
       background: var(--input-bg);
       color: var(--text);
       font-family: var(--mono);
@@ -612,6 +617,10 @@
       transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
       flex-shrink: 0;
     }
+    [data-theme="light"] .custom-radio-dot {
+      background: #f1f5f9;
+      border: 1px solid rgba(36, 59, 103, 0.35); /* Prevents blending seamlessly into light theme cards */
+    }
     
     /* Highlight Checked state */
     .radio-button-pill:has(input[type="radio"]:checked) {
@@ -619,8 +628,11 @@
       background: var(--soft-primary);
       box-shadow: 0 0 15px rgba(96, 165, 250, 0.2);
     }
+    [data-theme="light"] .radio-button-pill:has(input[type="radio"]:checked) {
+      color: var(--primary);
+    }
     .radio-button-pill:has(input[type="radio"]:checked) .custom-radio-dot {
-      background: #3b82f6;
+      background: #3b82f6; /* Glowing blue inner orb */
       border-color: #60a5fa;
       box-shadow: 0 0 8px rgba(96, 165, 250, 0.5);
     }
@@ -633,7 +645,7 @@
       width: 8px;
       height: 8px;
       border-radius: 50%;
-      background: #ffffff;
+      background: #ffffff; /* White core */
     }
 
     /* Inline sub-agency Yes/No layouts */
@@ -687,7 +699,7 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* ── Agency blocks ── */
+    /* ── Agency blocks (Divider separators) ── */
     .agency-block {
       grid-column: span 12;
       border-bottom: 1.5px solid var(--panel-inner-border);
@@ -1045,18 +1057,50 @@
         height: 48px !important;
       }
 
-      /* Custom Yes/No selectors stacked on mobile */
+      /* Keep YES/NO buttons side-by-side on mobile (Screenshot 4.17.52 PM) */
       .yes-no-row-custom {
-        grid-template-columns: 1fr !important;
-        gap: 10px !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 12px !important;
+        width: 100% !important;
+        max-width: none !important;
+      }
+      .radio-button-pill {
+        min-height: 48px !important;
+        padding: 10px 16px !important;
+        font-size: 13px !important;
+      }
+
+      /* Keep inner YES/NO buttons inline on the right side on mobile */
+      .agency-question {
+        flex-direction: row !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        gap: 12px !important;
+        width: 100% !important;
+        flex-wrap: nowrap !important;
+      }
+      .agency-question .label-text {
+        font-size: 11px !important;
+        flex-shrink: 1 !important;
+        white-space: nowrap !important;
       }
       .inline-yes-no-row {
-        flex-direction: column !important;
-        width: 100% !important;
+        flex-direction: row !important;
+        gap: 8px !important;
+        width: auto !important;
+        flex-shrink: 0 !important;
       }
       .radio-button-pill.inline-pill {
-        width: 100% !important;
-        height: 50px !important;
+        width: 80px !important;
+        height: 38px !important;
+        padding: 6px 10px !important;
+        border-radius: 12px !important;
+        font-size: 11px !important;
+        min-height: auto !important;
+      }
+      .radio-button-pill.inline-pill .custom-radio-dot {
+        width: 14px !important;
+        height: 14px !important;
       }
 
       /* Inputs — fixed 50px */
@@ -1090,9 +1134,6 @@
       .check-pill input, .radio-pill input {
         width: 20px !important; height: 20px !important;
       }
-
-      /* Agency */
-      .agency-question { flex-direction: column !important; align-items: flex-start !important; gap: 10px !important; }
 
       /* People rows */
       .repeat-row { grid-template-columns: 1fr !important; gap: 12px !important; padding: 16px !important; }
@@ -1585,8 +1626,8 @@
       </section>
 
       <div class="bottom-actions">
-        <button class="btn-secondary" type="button" onclick="generatePDF()">Save PDF</button>
-        <button class="btn-primary" type="button" onclick="submitReport()">Submit</button>
+        <button class="btn-secondary" type="button" onclick="generatePDF()">🖨 Print / Save PDF</button>
+        <button class="btn-primary" type="button" onclick="submitReport()">🚀 Submit</button>
       </div>
     </div>
   </div>
@@ -1864,13 +1905,6 @@
     c.appendChild(row);
   }
 
-  function getRepeatRows(containerId) {
-    return Array.from(document.querySelectorAll(`#${containerId} .repeat-row`)).map(r => ({
-      name:    r.querySelector('.person-row-name').value.trim(),
-      contact: r.querySelector('.person-row-contact').value.trim()
-    })).filter(r => r.name || r.contact);
-  }
-
   // ── Conditional visibility ────────────────────────────────────────────────────
   function toggleConditional(radioName, sectionId) {
     document.getElementById(sectionId).classList.toggle('show', getRadioValue(radioName)==='Yes');
@@ -1936,6 +1970,13 @@
         r.readAsDataURL(f);
       });
     }));
+  }
+
+  function getRepeatRows(containerId) {
+    return Array.from(document.querySelectorAll(`#${containerId} .repeat-row`)).map(r => ({
+      name:    r.querySelector('.person-row-name').value.trim(),
+      contact: r.querySelector('.person-row-contact').value.trim()
+    })).filter(r => r.name || r.contact);
   }
 
   // ── Submit ────────────────────────────────────────────────────────────────────
