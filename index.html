@@ -1287,13 +1287,11 @@
           </div>
           <div class="field col-4">
             <label for="reportedBy">Reported By <span class="required">*</span></label>
-            <select id="reportedBy" name="reportedBy" required>
-              <option value="">Loading employees…</option>
-            </select>
+            <input id="reportedBy" name="reportedBy" value="Diana Gallarzo" required />
           </div>
           <div class="field col-4">
             <label for="reportedByPosition">Position</label>
-            <input id="reportedByPosition" name="reportedByPosition" readonly placeholder="Auto-filled from employee list" />
+            <input id="reportedByPosition" name="reportedByPosition" value="Manager" placeholder="Position / Title" />
           </div>
           <div class="field col-4">
             <label for="incidentDate">Incident Date <span class="required">*</span></label>
@@ -1839,22 +1837,13 @@
 
   // ── Employees ─────────────────────────────────────────────────────────────────
   function renderEmployees() {
-    const rb = document.getElementById('reportedBy');
     const sd = document.getElementById('staffDropdown');
-    rb.innerHTML = '<option value="">Select employee</option>';
     sd.innerHTML = '<option value="">Select staff member</option>';
     employees.forEach(e => {
-      const opt1 = new Option(e.name, e.name); opt1.dataset.position = e.position; rb.add(opt1);
-      const opt2 = new Option(`${e.name} — ${e.position}`, e.name); opt2.dataset.position = e.position; sd.add(opt2);
+      const opt = new Option(`${e.name} — ${e.position}`, e.name);
+      opt.dataset.position = e.position;
+      sd.add(opt);
     });
-    // Default: pre-select Diana Gallarzo as the reporter
-    const defaultName = 'Diana Gallarzo';
-    const defaultPos  = 'Manager';
-    const dianaOpt = Array.from(rb.options).find(o => o.value === defaultName);
-    if (dianaOpt) {
-      rb.value = defaultName;
-      document.getElementById('reportedByPosition').value = dianaOpt.dataset.position || defaultPos;
-    }
   }
 
   async function loadStaffFromSheet() {
@@ -1864,7 +1853,6 @@
       renderEmployees();
       if (!employees.length) showToast('No active employees found in Staff_List');
     } catch(err) {
-      document.getElementById('reportedBy').innerHTML = '<option value="">Error loading employees</option>';
       document.getElementById('staffDropdown').innerHTML = '<option value="">Error loading staff</option>';
       showToast('Could not load staff list');
       console.error(err);
@@ -1875,12 +1863,13 @@
   function addSelectedStaff() {
     const typed = document.getElementById('customStaffName').value.trim();
     const sd    = document.getElementById('staffDropdown');
-    const opt   = sd.options[sd.selectedIndex];
     let person  = null;
     if (typed) {
       person = { name: typed, position: 'Typed manually' };
     } else if (sd.value) {
-      person = { name: sd.value, position: opt.dataset.position || '' };
+      // Look up directly from the employees array — more reliable than reading dataset from DOM
+      const emp = employees.find(e => e.name === sd.value);
+      person = { name: sd.value, position: emp ? emp.position : '' };
     }
     if (!person) { showToast('Select or type a staff name'); return; }
     if (!selectedStaff.some(s => s.name.toLowerCase() === person.name.toLowerCase())) selectedStaff.push(person);
@@ -2064,10 +2053,6 @@
   }
 
   // Event listeners
-  document.getElementById('reportedBy').addEventListener('change', () => {
-    const opt = document.getElementById('reportedBy').options[document.getElementById('reportedBy').selectedIndex];
-    document.getElementById('reportedByPosition').value = opt ? opt.dataset.position||'' : '';
-  });
 
   // Dynamic Toggle Controller for Yes/No Selection Nodes
   function handleYesNoToggleChange() {
